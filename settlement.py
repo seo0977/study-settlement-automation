@@ -26,7 +26,7 @@ import math
 class MemberWeekInput:
     name: str
     study_hours: float
-    merit_points: int = 0
+    merit_points: float = 0
 
 
 @dataclass
@@ -99,7 +99,7 @@ class SettlementLedger:
         for r in entry["records"]:
             elig = "✅ 상금자격" if r["eligible_this_week"] else ""
             lines.append(
-                f"- {r['name']}: {r['study_hours']}시간 (상벌점 {r['merit_points']:+d}) "
+                f"- {r['name']}: {r['study_hours']}시간 (상벌점 {r['merit_points']:+g}) "
                 f"→ 이번주 벌금 {r['fine_this_week']:,}원 {elig}\n"
                 f"    기초 {r['opening_balance']:,}원 + 이번주 {r['fine_this_week']:,}원 "
                 f"= 기말 {r['closing_balance']:,}원"
