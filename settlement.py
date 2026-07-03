@@ -17,7 +17,7 @@ CPA 스터디그룹의 주간 공부시간/상벌점 기록을 기반으로,
   기말잔액만큼 입금/회수. (추가 보증금 납부는 실제로 입금됐을 때만 add_deposit으로 기록)
 """
 
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 
 
 @dataclass
@@ -32,7 +32,6 @@ class Member:
     name: str
     balance: float = 10000
     active: bool = True
-    history: list = field(default_factory=list)
 
 
 class SettlementLedger:
@@ -47,12 +46,16 @@ class SettlementLedger:
             self.members[name] = Member(name=name, balance=self.initial_deposit)
         return self.members[name]
 
-    def add_deposit(self, name: str, amount: float, note: str = ""):
-        """실제로 추가 보증금이 입금됐을 때만 수동으로 기록"""
+    def add_deposit(self, name: str, amount: float):
+        """
+        실제로 추가 보증금이 입금됐을 때만 수동으로 기록.
+
+        사용 예시:
+            ledger.add_deposit("Member6", 10000)
+            → Member6의 balance에 10,000원이 더해짐
+        """
         m = self._get_or_create(name)
         m.balance += amount
-        m.history.append({"event": "deposit", "amount": amount, "note": note,
-                           "balance_after": m.balance})
 
     def process_week(self, week_label: str, threshold_hours: float,
                       entries: list[MemberWeekInput]):
@@ -97,7 +100,6 @@ class SettlementLedger:
                 "opening_balance": round(opening),
                 "closing_balance": round(m.balance),
             }
-            m.history.append(record)
             week_records.append(record)
 
         self.week_log.append({
