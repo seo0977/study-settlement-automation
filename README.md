@@ -1,2 +1,26 @@
 # study-settlement-automation
-Automating weekly study-hour tracking and fine/reward settlement for a CPA study group (previously done manually in Excel)
+
+CPA 스터디그룹의 주간 공부시간 기록 및 벌금/상금 정산을 자동화하는 프로젝트입니다.
+
+## Background
+
+스터디그룹을 운영하며 매주 아래 과정을 엑셀로 수작업 처리했습니다.
+
+- 스터디원별 요일당 공부시간 기록
+- 주간 합계 계산 후 기준시간(주 55시간) 대비 초과/미달 판정
+- 미달 시 벌금, 초과 시 상금 산정
+- 전주 이월 벌금/상금을 다음 주 정산에 반영
+- 매주 새 시트를 복사해 위 과정을 반복
+
+48주 이상 이 과정을 반복하며 매주 동일한 계산을 수기로 처리하는 데 상당한 시간이 소요됨을
+경험했고, 규칙이 명확한 반복 작업이라는 점에서 자동화가 가능하다고 판단했습니다.
+
+## Goal
+
+- 주간 공부시간 데이터를 입력하면 벌금/상금/이월 금액을 자동 산출
+- 기존 엑셀 로직을 Python으로 재구현
+- (추후) 자연어로 정산 내역을 질의할 수 있는 기능 추가 예정
+
+## Status
+
+🚧 In progress
