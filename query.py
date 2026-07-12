@@ -16,7 +16,7 @@ from settlement import SettlementLedger
 def answer_question(ledger: SettlementLedger, question: str) -> str:
     q = question.strip()
 
-    # 1) 특정 주차 벌금/상금 총액
+# 1) 특정 주차 벌금/상금 총액
     m = re.search(r"(\d+)\s*주차?\s*(벌금|상금)", q)
     if m:
         week_num, kind = m.group(1), m.group(2)
@@ -28,7 +28,15 @@ def answer_question(ledger: SettlementLedger, question: str) -> str:
         if kind == "벌금":
             return f"{week_label} 벌금 총액: {entry['total_fine']:,}원 (자격자 {entry['eligible_count']}명)"
         else:
-            return f"{week_label} 1인당 상금: {entry['prize_per_person']:,}원"
+            eligible_changes = [r["change"] for r in entry["records"] if r["eligible"]]
+            if not eligible_changes:
+                return f"{week_label}: 자격자가 없어 상금이 지급되지 않았습니다."
+            if min(eligible_changes) == max(eligible_changes):
+                return f"{week_label} 1인당 상금: {eligible_changes[0]:,}원"
+            return (
+                f"{week_label} 1인당 상금: {min(eligible_changes):,}~{max(eligible_changes):,}원 "
+                f"(나머지 원 배분으로 1원 차이 있음)"
+            )
 
     # 2) 특정 멤버 잔액 조회
     m = re.search(r"(Member\d+|[가-힣]+)\s*(잔액|보증금)", q)
